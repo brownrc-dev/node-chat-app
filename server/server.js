@@ -16,11 +16,11 @@ app.use(express.static(publicPath));
 
 io.on('connection', function(socket) {
     console.log('New user connected');
-    
+
     socket.emit('newMessage', generateMessage('Admin', "Welcome to the chat app!"));
-    
+
     socket.broadcast.emit('newMessage', generateMessage('Admin', "New user joined chat room."));
-    
+
     /*
     socket.emit('newEmail', {
         from: "brownrc@live.com",
@@ -28,12 +28,12 @@ io.on('connection', function(socket) {
         createdAt: new Date()
     });
     */
-    
+
     socket.on('createMessage', (message, callback) => {
         console.log("Message: ", message);
         io.emit('newMessage', generateMessage(message.from, message.text));
         callback('This is from the server.');
-        
+
         /*
         // Send to everyone but current user
         socket.broadcast.emit('newMessage', {
@@ -43,13 +43,17 @@ io.on('connection', function(socket) {
         });
         */
     });
-    
+
     socket.on('createEmail', function(newEmail) {
         console.log('createEmail', newEmail);
     });
-    
+
     socket.on('disconnect', function() {
         console.log('User was disconnected');
+    });
+
+    socket.on('join', function(params, callback) {
+        
     });
 });
 
