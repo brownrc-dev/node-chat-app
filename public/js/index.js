@@ -23,10 +23,21 @@ socket.on('newMessage', function(message) {
     // console.log("New Message: ", message);
 
     var formattedTime = moment(message.createdAt).format('h:mm a');
+    var template = $('#message-template').html();
+    var html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+    });
+
+    $('#messages').append(html);
+
+    /*
     var list = $('<li></li>');
     list.text(`[${message.from} (${formattedTime})]: ${message.text}`);
+    */
 
-    jQuery('#messages').append(list);
+    // jQuery('#messages').append(list);
 });
 
 /*
