@@ -20,10 +20,11 @@ socket.on('newEmail', function(emailData) {
 });
 
 socket.on('newMessage', function(message) {
-    console.log("New Message: ", message);
+    // console.log("New Message: ", message);
 
+    var formattedTime = moment(message.createdAt).format('h:mm a');
     var list = $('<li></li>');
-    list.text(`[${message.from}]: ${message.text}`);
+    list.text(`[${message.from} (${formattedTime})]: ${message.text}`);
 
     jQuery('#messages').append(list);
 });
