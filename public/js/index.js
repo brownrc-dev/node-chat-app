@@ -1,14 +1,22 @@
 var socket = io();
 
+function scrollToBottom() {
+    var messages = $('#messages');
+    var newMessage = messages.children('li:last-child');
+
+    var clientHeight = messages.prop('clientHeight');
+    var scrollTop = messages.prop('scrollTop');
+    var scrollHeight = messages.prop('scrollHeight');
+    var newMessageHeight = newMessage.innerHeight();
+    var lastMessageHeight = newMessage.prev().innerHeight();
+
+    if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+        messages.scrollTop(scrollHeight);
+    }
+}
+
 socket.on('connect', function() {
     console.log("Connected to server");
-
-    /*
-    socket.emit('createEmail', {
-        to: 'admin@nsreverse.net',
-        text: 'this is another test email'
-    });
-    */
 });
 
 socket.on('disconnect', function() {
@@ -20,8 +28,6 @@ socket.on('newEmail', function(emailData) {
 });
 
 socket.on('newMessage', function(message) {
-    // console.log("New Message: ", message);
-
     var formattedTime = moment(message.createdAt).format('h:mm a');
     var template = $('#message-template').html();
     var html = Mustache.render(template, {
@@ -31,23 +37,8 @@ socket.on('newMessage', function(message) {
     });
 
     $('#messages').append(html);
-
-    /*
-    var list = $('<li></li>');
-    list.text(`[${message.from} (${formattedTime})]: ${message.text}`);
-    */
-
-    // jQuery('#messages').append(list);
+    scrollToBottom();
 });
-
-/*
-socket.emit('createMessage', {
-    from: 'Frank',
-    text: 'Hi'
-}, function(serverResponse) {
-    console.log(serverResponse);
-});
-*/
 
 $('#message-form').on('submit', function(e) {
     e.preventDefault();

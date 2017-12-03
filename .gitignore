@@ -1,3 +1,4 @@
 node_modules/
 heroku/
 playground/
+public/js/comments.js
