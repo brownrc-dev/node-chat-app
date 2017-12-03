@@ -2,7 +2,7 @@ var socket = io();
 
 socket.on('connect', function() {
     console.log("Connected to server");
-    
+
     /*
     socket.emit('createEmail', {
         to: 'admin@nsreverse.net',
@@ -21,28 +21,31 @@ socket.on('newEmail', function(emailData) {
 
 socket.on('newMessage', function(message) {
     console.log("New Message: ", message);
-    
+
     var list = $('<li></li>');
     list.text(`[${message.from}]: ${message.text}`);
-    
+
     jQuery('#messages').append(list);
 });
 
+/*
 socket.emit('createMessage', {
     from: 'Frank',
     text: 'Hi'
 }, function(serverResponse) {
     console.log(serverResponse);
 });
+*/
 
 $('#message-form').on('submit', function(e) {
     e.preventDefault();
-    
+
+    var messageTextBox = $('[name=message]');
+
     socket.emit('createMessage', {
         from: 'User',
-        text: $('[name=message]').val()
+        text: messageTextBox.val()
     }, function() {
-        
+        messageTextBox.val('');
     });
 });
-
