@@ -1,5 +1,6 @@
 
 const path = require('path');
+const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
@@ -11,6 +12,8 @@ app.use(express.static(publicPath));
 
 var port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+var server = http.createServer(app);
+
+server.listen(port, () => {
     console.log(`Server is up on port ${port}`);
 });
