@@ -20,16 +20,27 @@ socket.on('connect', function() {
 
     socket.emit('join', params, function(error) {
         if (error) {
-            
+            alert(error);
+            window.location.href = "/";
         }
         else {
-
+            console.log('No errors');
         }
     });
 });
 
 socket.on('disconnect', function() {
     console.log('Disconnected from server');
+});
+
+socket.on('updateUserList', function(users) {
+    var ul = $('<ol></ol>');
+
+    users.forEach(function(user) {
+        ul.append($('<li></li>').text(user));
+    });
+
+    $('#users').html(ul);
 });
 
 socket.on('newEmail', function(emailData) {
@@ -55,7 +66,6 @@ $('#message-form').on('submit', function(e) {
     var messageTextBox = $('[name=message]');
 
     socket.emit('createMessage', {
-        from: 'User',
         text: messageTextBox.val()
     }, function() {
         messageTextBox.val('');

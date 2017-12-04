@@ -1,3 +1,4 @@
 git add -A
-git commit -m "Updated info"
+git commit -m "Auto Commit"
 git push heroku master
+git push github master
