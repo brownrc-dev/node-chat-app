@@ -14,6 +14,12 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 var users = new Users();
+users.addUser('0x00000000', 'Admin', '0x00000000');
+users.addUser('0x00000001', 'Administrator', '0x00000000');
+users.addUser('0x00000002', 'System', '0x00000000');
+users.addUser('0x00000003', '(System)', '0x00000000');
+users.addUser('0x00000004', 'System Administrator', '0x00000000');
+users.addUser('0x00000005', '(System Administrator)', '0x00000000');
 
 app.use(express.static(publicPath));
 
@@ -47,6 +53,18 @@ io.on('connection', function(socket) {
     socket.on('join', function(params, callback) {
         if (!isRealString(params.name) || !isRealString(params.room)) {
             return callback("Name and room are required.");
+        }
+
+        var usernameExists = false;
+
+        users.users.forEach(function(user) {
+            if (params.name === user.name) {
+                usernameExists = true;
+            }
+        });
+
+        if (usernameExists === true) {
+            return callback("Username already exists! Please choose another.");
         }
 
         var username = params.name;
